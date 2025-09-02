@@ -24,22 +24,18 @@ if (process.env.NODE_ENV !== "production") {
 app.use(express.json()); // this middleware will parse JSON bodies: req.body
 app.use(rateLimiter);
 
-// our simple custom middleware
-// app.use((req, res, next) => {
-//   console.log(`Req method is ${req.method} & Req URL is ${req.url}`);
-//   next();
-// });
+
 
 app.use("/api/notes", notesRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  // Use absolute path to avoid any issues
-  const staticPath = "C:/Users/madus/OneDrive/Documents/React/MERN/Frontend/dist";
+  // Use relative path for portability
+  const staticPath = path.join(__dirname, "../Frontend/dist");
   console.log("Static files directory:", staticPath);
   app.use(express.static(staticPath));
 
   app.get("*", (req, res) => {
-    const indexPath = "C:/Users/madus/OneDrive/Documents/React/MERN/Frontend/dist/index.html";
+    const indexPath = path.join(__dirname, "../Frontend/dist/index.html");
     console.log("Index HTML path:", indexPath);
     res.sendFile(indexPath);
   });
